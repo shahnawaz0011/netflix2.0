@@ -8,13 +8,10 @@ import Row from './row/Row';
 function HomeScreen() {
     return (
         <div className='homeScreen'>
-
             <Nav />
-
-            {/* banner */}
+            
             <Banner/>
 
-            {/* Row */}
             <Row title='NETFLIX ORIGINALS' fetchURL={requests.fetchNetflixOriginals} isLargeRow/>
             <Row title='TOP RATED' fetchURL={requests.fetchTopRated} />
             <Row title='ACTION MOVIES' fetchURL={requests.fetchActionMovies} />
