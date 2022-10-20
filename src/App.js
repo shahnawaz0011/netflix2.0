@@ -6,14 +6,21 @@ import {BrowserRouter as Router,
       Route,
     Link
   } from "react-router-dom";
+import Login from './components/Login/Login.js';
 
 function App() {
+
+  const user = null;
   return (
     <div className="App">
         <Router>
+          {!user ? (
+            <Login/>
+          ) : 
           <Routes>
             <Route exact path='/' element={<Home/>}/>
           </Routes>
+          }
         </Router>
     </div>
   );
