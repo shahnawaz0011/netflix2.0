@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import Home from './components/home';
 import {BrowserRouter as Router,
@@ -6,16 +6,41 @@ import {BrowserRouter as Router,
       Route,
     Link
   } from "react-router-dom";
-import Login from './components/Login/Login.js';
+import LoginScreen from './components/Login/LoginScreen.js';
+import { auth } from './firbase';
+import {useDispatch, useSelector} from "react-redux";
+import { login, logout, selectUser } from './features/userSlice';
 
 function App() {
 
-  const user = null;
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    //check weather user is authenticated or not
+    const unsubscribe =  auth.onAuthStateChanged((userAuth) =>{
+      if(userAuth){
+        //logged In
+        dispatch(login({
+          uid: userAuth.uid,
+          email: userAuth.email
+        }))
+        console.log(userAuth);
+      }
+      else{
+        //logged out
+        dispatch(logout);
+      }
+      return unsubscribe;
+    })
+  },[])
+
+  //selecting the user from redux and if the user have value then it will show home screen
+  const user = useSelector(selectUser);
   return (
     <div className="App">
         <Router>
           {!user ? (
-            <Login/>
+            <LoginScreen/>
           ) : 
           <Routes>
             <Route exact path='/' element={<Home/>}/>
