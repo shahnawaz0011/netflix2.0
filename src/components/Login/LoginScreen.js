@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import SignUp from '../signup/SignUp';
+import SignInScreen from '../signup/SignInScreen';
 import './login.css';
-const Login = () => {
+const LoginScreen = () => {
 
     const [signIn, setSignIn] = useState(false);
 
@@ -15,7 +15,7 @@ const Login = () => {
         </div>
         <div className='login__form'>
             {signIn ? (
-                <SignUp/>
+                <SignInScreen/>
             ) : 
             <>
             <h1>Unlimited Films, TV programs and more.</h1>
@@ -36,4 +36,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginScreen
