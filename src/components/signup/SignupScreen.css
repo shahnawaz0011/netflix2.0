@@ -1,5 +1,5 @@
 .signupScreen{
-    max-width: 300px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(0,0,0,0.8);
@@ -47,4 +47,14 @@ color: gray;
 .signupScreen__link:hover{
 cursor: pointer;
 text-decoration: underline;
+}
+
+@media(max-width:786px){
+    .signupScreen{
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: rgba(0,0,0,0.8);
+        padding: 10px;
+    }
 }
