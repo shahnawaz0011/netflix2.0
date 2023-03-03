@@ -10,6 +10,7 @@ import LoginScreen from './components/Login/LoginScreen.js';
 import { auth } from './firbase';
 import {useDispatch, useSelector} from "react-redux";
 import { login, logout, selectUser } from './features/userSlice';
+import ProfileScreen from './components/profileScreen';
 
 function App() {
 
@@ -28,14 +29,15 @@ function App() {
       }
       else{
         //logged out
-        dispatch(logout);
+        dispatch(logout());
       }
       return unsubscribe;
     })
-  },[])
+  },[dispatch])
 
   //selecting the user from redux and if the user have value then it will show home screen
   const user = useSelector(selectUser);
+
   return (
     <div className="App">
         <Router>
@@ -43,6 +45,7 @@ function App() {
             <LoginScreen/>
           ) : 
           <Routes>
+            <Route exact path='/profile' element={<ProfileScreen/>}/>
             <Route exact path='/' element={<Home/>}/>
           </Routes>
           }
