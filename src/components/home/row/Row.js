@@ -1,42 +1,60 @@
 import React, { useEffect, useState } from 'react'
 import './Row.css';
 import axios from '../../../axios/axios'
+import RowSkeleton from './rowSkeleton/RowSkeleton';
+import { Link } from 'react-router-dom';
 
-function Row({title, fetchURL, isLargeRow = false}) {
-    const [movies , setMovie] = useState([]);
+function Row({ title, fetchURL, isLargeRow = false }) {
+    const [movies, setMovie] = useState([]);
 
+    const [isLoading, setIsLoading] = useState(true);
 
     const base_url = 'https://image.tmdb.org/t/p/original';
 
-    useEffect(()=>{
-        async function fetchData(){
-            const request = await axios.get(fetchURL);
-            console.log(request,'reqq');
-            setMovie(request.data.results);
-            return request;
-        }
-        fetchData();
-    },[fetchURL])
+    useEffect(() => {
+        setTimeout(() => {
+            const fetchData = async () => {
+                await axios.get(fetchURL)
+                .then((result)=>{
+                    console.log(result, 'reqq');
+                    setMovie(result.data.results);
+                    setIsLoading(false);
+                    localStorage.setItem('movies_list', JSON.stringify(result.data));
+                    return result;
+                })
+                
+            }
+            fetchData();
+        }, 2000)
 
 
-  return (
-    <div className='row'>
-        <h2>{title}</h2>
-        <div className='row_posters'>
-        {movies.map((movie) => (
-            ((isLargeRow && movie.poster_path) ||
-            (!isLargeRow && movie.backdrop_path)) && (
-                <img className={`row_poster ${isLargeRow && "row_poster_large"}`} 
-                key={movie.id}
-                src={`${base_url}${
-                isLargeRow ? movie?.poster_path : movie?.backdrop_path
-            }`} alt={movie.name}/>
-            )
+    }, [fetchURL])
+
+
+    return (
+        <div className='row'>
             
-        ))}
+            <h2>{title}</h2>
+            {!isLoading ? (
+                <div className='row_posters'>
+                {movies.map((movie, key) => (
+                    ((isLargeRow && movie.poster_path) ||
+                        (!isLargeRow && movie.backdrop_path)) && (
+                        <Link to={`/movieDetails/${movie.id}`} key={movie.id} >
+                        <img className={`row_poster ${isLargeRow && "row_poster_large"}`}
+                            key={movie.id}
+                            src={`${base_url}${isLargeRow ? movie?.poster_path : movie?.backdrop_path
+                            }`} alt={movie.name} loading="lazy" />
+                            </Link>
+                    )
+                ))}
+            </div>) :
+             <div className='row_posters row_posters__skeleton'>
+                <RowSkeleton isLargeRow={isLargeRow}/>
+            </div>}
+             
         </div>
-    </div>
-  )
+    )
 }
 
 export default Row

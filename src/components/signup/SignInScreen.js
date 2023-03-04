@@ -1,13 +1,16 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { auth } from '../../firbase';
 import './SignupScreen.css';
 
 function SignInScreen() {
 
+  const [invalidLoginPassword , setInvalidLoginPassword] = useState(false);
+
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const handleSignUp = (e) =>{
+    debugger;
     e.preventDefault();
 
     auth.signInWithEmailAndPassword(
@@ -16,7 +19,7 @@ function SignInScreen() {
     ).then((authUser)=>{
       console.log('sign In details',authUser);
     }).catch((error)=>{
-      alert(error.message);
+      setInvalidLoginPassword(true);
     })
 
 
@@ -36,6 +39,9 @@ function SignInScreen() {
   }
   return (
     <div className='signupScreen'>
+      {invalidLoginPassword && <div style={{color:'red'}}>
+        Please give a valid Email and Password
+      </div>}
       <form>
         <h1>Sign In</h1>
         <input ref={emailRef} placeholder='Email' type="email" />

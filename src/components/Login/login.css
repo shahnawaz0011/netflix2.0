@@ -37,7 +37,7 @@
 }
 
 .login .login__form {
-  width: 90%!important;
+  /* width: 50%!important; */
   z-index: 1;
   color: #fff;
   padding: 20px;
