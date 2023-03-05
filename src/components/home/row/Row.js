@@ -3,6 +3,8 @@ import './Row.css';
 import axios from '../../../axios/axios'
 import RowSkeleton from './rowSkeleton/RowSkeleton';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addMovies } from '../../../app/action/movies';
 
 function Row({ title, fetchURL, isLargeRow = false }) {
     const [movies, setMovie] = useState([]);
@@ -11,7 +13,10 @@ function Row({ title, fetchURL, isLargeRow = false }) {
 
     const base_url = 'https://image.tmdb.org/t/p/original';
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
+        debugger;
         setTimeout(() => {
             const fetchData = async () => {
                 await axios.get(fetchURL)
@@ -20,6 +25,7 @@ function Row({ title, fetchURL, isLargeRow = false }) {
                     setMovie(result.data.results);
                     setIsLoading(false);
                     localStorage.setItem('movies_list', JSON.stringify(result.data));
+                    dispatch(addMovies({movies: result.data.results}))
                     return result;
                 })
                 
@@ -40,7 +46,7 @@ function Row({ title, fetchURL, isLargeRow = false }) {
                 {movies.map((movie, key) => (
                     ((isLargeRow && movie.poster_path) ||
                         (!isLargeRow && movie.backdrop_path)) && (
-                        <Link to={`/movieDetails/${movie.id}`} key={movie.id} >
+                        <Link to={`/movieDetails/${movie.id}`} key={movie.id} state={{movie}}>
                         <img className={`row_poster ${isLargeRow && "row_poster_large"}`}
                             key={movie.id}
                             src={`${base_url}${isLargeRow ? movie?.poster_path : movie?.backdrop_path

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import './App.css';
 import Home from './components/home';
 import {BrowserRouter as Router,
@@ -10,7 +10,9 @@ import { auth } from './firbase';
 import {useDispatch, useSelector} from "react-redux";
 import { login, logout, selectUser } from './features/userSlice';
 import ProfileScreen from './components/profileScreen';
-import MovieDetails from './components/movieDetails/MovieDetails';
+// import MovieDetails from './components/movieDetails/MovieDetails';
+
+const MovieDetails =  lazy(() => import('./components/movieDetails/MovieDetails'));
 
 function App() {
 
@@ -47,7 +49,7 @@ function App() {
           <Routes>
             <Route exact path='/profile' element={<ProfileScreen/>}/>
             <Route exact path='/' element={<Home/>}/>
-            <Route exact path="/movieDetails/:id"  element={<MovieDetails/>} />
+            <Route exact path="/movieDetails/:id"  element={<Suspense><MovieDetails/></Suspense>} />
 
             {/* <Route exact path='/movieDetails' element={<MovieDetails/>}/> */}
           </Routes>
